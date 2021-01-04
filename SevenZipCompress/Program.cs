@@ -24,7 +24,7 @@ namespace SevenZipCompress
         /// メイン処理
         /// </summary>
         /// <param name="args">コマンドライン引数</param>
-        private static void Execute(IReadOnlyList<string> args)
+        internal static void Execute(IReadOnlyList<string> args)
         {
             // コマンドライン引数
             if (args.Count != 2)
@@ -33,11 +33,10 @@ namespace SevenZipCompress
             }
 
             // 圧縮ファイルの存在チェック
-            // TODO ファイル、ディレクトリどっちでも動く？
             var targetFile = args[0];
-            if (!File.Exists(targetFile))
+            if (!File.Exists(targetFile) && !Directory.Exists(targetFile))
             {
-                throw new Exception("圧縮対象のファイルが存在しません。");
+                throw new Exception("圧縮対象のファイル・ディレクトリが存在しません。");
             }
 
             // 設定ファイルの存在チェック
@@ -67,21 +66,50 @@ namespace SevenZipCompress
                 // TODO FilePrefixがブランクの場合は、プリフィックスを付与しない
                 throw new Exception("[設定ファイル filePrefix] ファイルに付与するプリフィックスを指定してください。");
             }
-            
-            // TODO 出力ファイル名
-            var changeFile = "";
+
+            // 出力ファイル名
+            string dirName;
+            string fileName;
+            if (File.Exists(targetFile))
+            {
+                // ファイルを指定した
+                dirName = Path.GetDirectoryName(targetFile) ?? "";
+
+                // 拡張子を除いたファイル名
+                var removeExtensionFileName = Path.GetFileName(targetFile)
+                    .Replace(Path.GetExtension(targetFile), "");
+                fileName = settings.FilePrefix + removeExtensionFileName + ".7z";
+            }
+            else
+            {
+                // ディレクトリを指定した
+                dirName = Directory.GetParent(targetFile)?.ToString() ?? "";
+                fileName = settings.FilePrefix + Path.GetFileName(targetFile) + ".7z";
+            }
+
+            if (string.IsNullOrEmpty(dirName))
+            {
+                throw new Exception("圧縮先のディレクトリが正しく生成できませんでした。");
+            }
+
+            /*
+            Console.WriteLine($"{nameof(targetFile)} = {targetFile}");
+            Console.WriteLine($"{nameof(dirName)} = {dirName}");
+            Console.WriteLine($"{nameof(fileName)} = {fileName}");
+            */
 
             // 7zipで圧縮する
             var proInfo = new ProcessStartInfo
             {
                 FileName = settings.SevenZipPath,
+
                 // 引数はコマンドプロンプトで"C:\Program Files\7-Zip\7z.exe"を実行すれば表示される。
                 ArgumentList =
                 {
                     "a", // a: 圧縮
                     "-y", // -y: 強制的に処理を続行
                     $"-p{settings.CompressPassword}", // -p: パスワードを設定
-                    $"-o{Path.GetDirectoryName(changeFile)}", // -o: 出力先を指定
+                    $"{Path.Combine(dirName, fileName)}", // 出力ファイル名を指定
                     $"{targetFile}" // 圧縮対象のファイル
                 },
                 RedirectStandardOutput = true,
@@ -98,7 +126,7 @@ namespace SevenZipCompress
             process.WaitForExit();
             if (process.ExitCode == 0)
             {
-                throw new Exception("圧縮に成功しました。");
+                Console.WriteLine("圧縮に成功しました。");
             }
         }
     }
@@ -106,7 +134,7 @@ namespace SevenZipCompress
     /// <summary>
     /// appsettings.json
     /// </summary>
-    internal abstract class Settings
+    internal class Settings
     {
         /// <summary>
         /// 7-zipのインストールパス（7z.exeのパス）

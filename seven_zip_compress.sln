@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SevenZipCompress", "SevenZipCompress\SevenZipCompress.csproj", "{B9DA4F51-3D35-4C14-9F99-B00C75A367C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SevenZipCompressTests", "SevenZipCompressTests\SevenZipCompressTests.csproj", "{6C85DCDE-FDDC-423B-A191-C366CC4D2D49}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{B9DA4F51-3D35-4C14-9F99-B00C75A367C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9DA4F51-3D35-4C14-9F99-B00C75A367C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9DA4F51-3D35-4C14-9F99-B00C75A367C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C85DCDE-FDDC-423B-A191-C366CC4D2D49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C85DCDE-FDDC-423B-A191-C366CC4D2D49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C85DCDE-FDDC-423B-A191-C366CC4D2D49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C85DCDE-FDDC-423B-A191-C366CC4D2D49}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
