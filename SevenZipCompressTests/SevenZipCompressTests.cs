@@ -5,7 +5,7 @@ using SevenZipCompress;
 
 namespace SevenZipCompressTests
 {
-    public class Tests
+    public class SevenZipCompressTests
     {
         [SetUp]
         public void Setup()
@@ -13,7 +13,7 @@ namespace SevenZipCompressTests
         }
 
         /// <summary>
-        /// ファイルを圧縮
+        /// ファイルを圧縮（7z）
         /// </summary>
         [Test]
         public void Test001()
@@ -29,7 +29,7 @@ namespace SevenZipCompressTests
         }
 
         /// <summary>
-        /// ディレクトリを圧縮
+        /// ディレクトリを圧縮（7z）
         /// </summary>
         [Test]
         public void Test002()
@@ -45,12 +45,48 @@ namespace SevenZipCompressTests
         }
 
         /// <summary>
-        /// 指定されたディレクトリ内の「*.7z」ファイルを削除します。
+        /// ファイルを圧縮（zip）
+        /// </summary>
+        [Test]
+        public void Test003()
+        {
+            var workPath = Path.Combine(Environment.CurrentDirectory, "TestData/Test003");
+
+            DeleteFile(workPath);
+
+            var args = new[] {workPath + "/Test003.txt", "TestData/Test003/appsettings.json"};
+            Program.Execute(args);
+
+            Assert.That(File.Exists(workPath + "/PrefixTest003.zip"), Is.True);
+        }
+
+        /// <summary>
+        /// ディレクトリを圧縮（zip）
+        /// </summary>
+        [Test]
+        public void Test004()
+        {
+            var workPath = Path.Combine(Environment.CurrentDirectory, "TestData/Test004");
+
+            DeleteFile(workPath);
+
+            var args = new[] {workPath + "/新しいフォルダー", "TestData/Test004/appsettings.json"};
+            Program.Execute(args);
+
+            Assert.That(File.Exists(workPath + "/Prefix新しいフォルダー.zip"), Is.True);
+        }
+        
+        /// <summary>
+        /// 指定されたディレクトリ内の圧縮ファイルを削除します。
         /// </summary>
         /// <param name="workPath">削除対象のディレクトリ</param>
         private static void DeleteFile(string workPath)
         {
             foreach (var file in Directory.GetFiles(workPath, "*.7z"))
+            {
+                File.Delete(file);
+            }
+            foreach (var file in Directory.GetFiles(workPath, "*.zip"))
             {
                 File.Delete(file);
             }

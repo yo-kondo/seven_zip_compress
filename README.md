@@ -18,6 +18,7 @@
     "sevenZipPath": "C:\\Program Files\\7-Zip\\7z.exe",
     "compressPassword": "password1",
     "filePrefix": "Prefix"
+    "extension": ".zip"
 }
 ```
 
@@ -27,8 +28,10 @@
   圧縮パスワードを指定して下さい。
 * filePrefix  
   圧縮したファイルの先頭に付与する文字列を指定してください。
+* extension  
+  圧縮するタイプの拡張子を指定してください。`.zip`、`.7z`は動作確認済です。
 
-設定ファイルは実行ファイルのコマンドライン引数で指定して下さい。
+設定ファイルのパスは、実行ファイルのコマンドライン引数で指定して下さい。
 
 ## バージョン
 

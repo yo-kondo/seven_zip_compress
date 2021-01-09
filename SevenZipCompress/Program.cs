@@ -8,15 +8,17 @@ namespace SevenZipCompress
 {
     internal static class Program
     {
-        private static void Main(string[] args)
+        private static int Main(string[] args)
         {
             try
             {
                 Execute(args);
+                return 0;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
+                return 1;
             }
         }
 
@@ -78,13 +80,13 @@ namespace SevenZipCompress
                 // 拡張子を除いたファイル名
                 var removeExtensionFileName = Path.GetFileName(targetFile)
                     .Replace(Path.GetExtension(targetFile), "");
-                fileName = settings.FilePrefix + removeExtensionFileName + ".7z";
+                fileName = settings.FilePrefix + removeExtensionFileName + settings.Extension;
             }
             else
             {
                 // ディレクトリを指定した
                 dirName = Directory.GetParent(targetFile)?.ToString() ?? "";
-                fileName = settings.FilePrefix + Path.GetFileName(targetFile) + ".7z";
+                fileName = settings.FilePrefix + Path.GetFileName(targetFile) + settings.Extension;
             }
 
             if (string.IsNullOrEmpty(dirName))
@@ -153,5 +155,11 @@ namespace SevenZipCompress
         /// </summary>
         [JsonProperty("filePrefix")]
         public string FilePrefix { get; set; } = "";
+        
+        /// <summary>
+        /// 圧縮する際の拡張子
+        /// </summary>
+        [JsonProperty("extension")]
+        public string Extension { get; set; } = "";
     }
 }
